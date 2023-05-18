@@ -12,6 +12,8 @@ const App = () => {
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
 
+  const [messageShow, setMessageShow] = useState(null);
+
   useEffect(() => {
     const loginInfo = window.localStorage.getItem('loginInfo');
     if (loginInfo) {
@@ -24,11 +26,29 @@ const App = () => {
     e.preventDefault();
 
     const user = await loginService.login({ username, password });
-    setUser(user);
-    window.localStorage.setItem('loginInfo', JSON.stringify(user));
-    setUserName('');
-    setPassword('');
-    blogService.getAll().then((blogs) => setBlogs(blogs));
+    if (user.token) {
+      setUser(user);
+      window.localStorage.setItem('loginInfo', JSON.stringify(user));
+      setUserName('');
+      setPassword('');
+      setMessageShow({
+        styleMessage: 'success',
+        message: `Welcome ${user.name}`,
+      });
+      blogService.getAll().then((blogs) => setBlogs(blogs));
+
+      setTimeout(() => {
+        setMessageShow(null);
+      }, 5000);
+    } else {
+      setMessageShow({
+        styleMessage: 'error',
+        message: user.error,
+      });
+      setTimeout(() => {
+        setMessageShow(null);
+      }, 5000);
+    }
   };
   const handleLogout = () => {
     window.localStorage.removeItem('loginInfo');
@@ -38,16 +58,45 @@ const App = () => {
   const handleAddNewBlog = async (e) => {
     e.preventDefault();
     const blogAdd = {
-      title,
-      author,
-      url,
+      title: title.length < 1 ? null : title,
+      author: author,
+      url: url.length < 1 ? null : url,
     };
-    await blogService.createNew(blogAdd, user.token);
-    const getBlog = await blogService.getAll();
-    setBlogs(getBlog);
+    const blog = await blogService.createNew(blogAdd, user.token);
+    if (!blog.title) {
+      setMessageShow({
+        styleMessage: 'error',
+        message: blog.message,
+      });
+      setTimeout(() => {
+        setMessageShow(null);
+      }, 5000);
+      return;
+    }
+
+    const getAllBlog = await blogService.getAll();
+    setMessageShow({
+      styleMessage: 'success',
+      message: `a new blog ${blogAdd.title} by ${blogAdd.author} added`,
+    });
+
+    setBlogs(getAllBlog);
     setTitle('');
     setAuthor('');
     setUrl('');
+    setTimeout(() => {
+      setMessageShow(null);
+    }, 5000);
+  };
+
+  const notification = (props) => {
+    const { styleMessage, message } = props;
+
+    return (
+      <div className={`noti ${styleMessage}`}>
+        <p>{message}</p>
+      </div>
+    );
   };
 
   const loginForm = () => {
@@ -104,7 +153,13 @@ const App = () => {
     );
   };
 
-  return <div>{!user ? loginForm() : blogList()}</div>;
+  return (
+    <div>
+      {messageShow && notification(messageShow)}
+
+      {!user ? loginForm() : blogList()}
+    </div>
+  );
 };
 
 export default App;

@@ -10,9 +10,12 @@ const createNew = async (blogData, token = 'no token') => {
   const config = {
     headers: { Authorization: `Bearer ${token}` },
   };
-
-  const response = await axios.post(baseUrl, blogData, config);
-  return response.data;
+  try {
+    const response = await axios.post(baseUrl, blogData, config);
+    return response.data;
+  } catch (err) {
+    return err.response.data;
+  }
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export

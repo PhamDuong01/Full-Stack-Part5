@@ -1,0 +1,19 @@
+* {
+  box-sizing: border-box;
+  /* margin: 0;
+  padding: 0; */
+}
+
+.noti {
+  font-size: 14px;
+  border-radius: 5px;
+}
+
+.success {
+  border: solid 2px green;
+  color: green !important;
+}
+.error {
+  border: solid 2px red;
+  color: red !important;
+}
