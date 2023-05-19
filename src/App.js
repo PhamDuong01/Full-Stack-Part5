@@ -65,7 +65,7 @@ const App = () => {
     const blogAdd = {
       title: getBlog.title.length < 1 ? null : getBlog.title,
       author: getBlog.author,
-      url: getBlog.url.length < 1 ? null : getBlog.title,
+      url: getBlog.url.length < 1 ? null : getBlog.url,
     };
 
     const blog = await blogService.createNew(blogAdd, user.token);
