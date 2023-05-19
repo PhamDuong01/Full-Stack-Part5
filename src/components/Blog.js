@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 
 const Blog = ({ blog, updateLikesBlog, removeBlog, owner }) => {
   const blogStyle = {
@@ -20,7 +21,6 @@ const Blog = ({ blog, updateLikesBlog, removeBlog, owner }) => {
       likes: likes + 1,
       user: blog.user.id,
     });
-    // console.log(updateBlog);
   };
 
   const handleRemoveClick = () => {
@@ -34,7 +34,7 @@ const Blog = ({ blog, updateLikesBlog, removeBlog, owner }) => {
         {isShowContent ? 'hide' : 'view'}
       </button>
       <div style={showContent}>
-        <a href={blog.url} target='_Blank'>
+        <a href={blog.url} target='_Blank' rel='noreferrer'>
           {blog.url}
         </a>
         <div>
@@ -46,6 +46,13 @@ const Blog = ({ blog, updateLikesBlog, removeBlog, owner }) => {
       </div>
     </div>
   );
+};
+
+Blog.prototype = {
+  blog: PropTypes.object.isRequired,
+  updateLikesBlog: PropTypes.func.isRequired,
+  removeBlog: PropTypes.func.isRequired,
+  owner: PropTypes.string.isRequired,
 };
 
 export default Blog;
