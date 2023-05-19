@@ -4,6 +4,7 @@ import blogService from './services/blogs';
 import loginService from './services/login';
 import Togglable from './components/Togglable';
 import BlogForm from './components/BlogForm';
+import Notification from './components/Notification';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -54,6 +55,7 @@ const App = () => {
       }, 5000);
     }
   };
+
   const handleLogout = () => {
     window.localStorage.removeItem('loginInfo');
     setUser(null);
@@ -91,16 +93,6 @@ const App = () => {
     }, 5000);
   };
 
-  const notification = (props) => {
-    const { styleMessage, message } = props;
-
-    return (
-      <div className={`noti ${styleMessage}`}>
-        <p>{message}</p>
-      </div>
-    );
-  };
-
   const loginForm = () => {
     return (
       <div>
@@ -128,7 +120,7 @@ const App = () => {
           <span>{user.name} is logged in </span>
           <button onClick={handleLogout}>log out</button>
         </div>
-        <Togglable buttonLabel='add new Blog' ref={blogFormRef}>
+        <Togglable buttonLabel='create new Blog' ref={blogFormRef}>
           <BlogForm creatBlog={createNewBlog} />
         </Togglable>
         <div style={{ paddingTop: '10px' }}>
@@ -143,7 +135,7 @@ const App = () => {
 
   return (
     <div>
-      {messageShow && notification(messageShow)}
+      {messageShow && <Notification message={messageShow} />}
 
       {!user ? loginForm() : blogList()}
     </div>
