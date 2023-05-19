@@ -93,6 +93,12 @@ const App = () => {
     }, 5000);
   };
 
+  const updateLikesBlog = async (getBlog) => {
+    await blogService.updateBlog(getBlog, user.token);
+    const getAllBlog = await blogService.getAll();
+    setBlogs(getAllBlog);
+  };
+
   const loginForm = () => {
     return (
       <div>
@@ -126,7 +132,7 @@ const App = () => {
         <div style={{ paddingTop: '10px' }}>
           <h4>Blogs list: </h4>
           {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} />
+            <Blog key={blog.id} blog={blog} updateLikesBlog={updateLikesBlog} />
           ))}
         </div>
       </div>

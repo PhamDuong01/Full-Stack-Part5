@@ -6,12 +6,28 @@ const getAll = async () => {
   return request.data;
 };
 
-const createNew = async (blogData, token = 'no token') => {
-  const config = {
+const config = (token) => {
+  return {
     headers: { Authorization: `Bearer ${token}` },
   };
+};
+
+const createNew = async (blogData, token = 'no token') => {
   try {
-    const response = await axios.post(baseUrl, blogData, config);
+    const response = await axios.post(baseUrl, blogData, config(token));
+    return response.data;
+  } catch (err) {
+    return err.response.data;
+  }
+};
+
+const updateBlog = async (blogData, token = 'no token') => {
+  const blog = {
+    ...blogData,
+    user: blogData.user.id,
+  };
+  try {
+    const response = await axios.put(baseUrl + `/${blogData.id}`, blog, config(token));
     return response.data;
   } catch (err) {
     return err.response.data;
@@ -19,4 +35,4 @@ const createNew = async (blogData, token = 'no token') => {
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { getAll, createNew };
+export default { getAll, createNew, updateBlog };

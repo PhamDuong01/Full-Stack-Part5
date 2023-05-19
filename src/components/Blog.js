@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import Togglable from './Togglable';
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, updateLikesBlog }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -10,9 +9,18 @@ const Blog = ({ blog }) => {
     marginBottom: 5,
   };
   const [isShowContent, setIsShowContent] = useState(false);
-
   const showContent = { display: isShowContent ? '' : 'none' };
+  const [likes, setLikes] = useState(blog.likes);
 
+  const handleLikeClick = () => {
+    setLikes(likes + 1);
+
+    updateLikesBlog({
+      ...blog,
+      likes: likes + 1,
+    });
+    // console.log(updateBlog);
+  };
   return (
     <div style={blogStyle}>
       {`${blog.title} - ${blog.author} `}
@@ -20,8 +28,13 @@ const Blog = ({ blog }) => {
         {isShowContent ? 'hide' : 'view'}
       </button>
       <div style={showContent}>
-        <p>{blog.url}</p>
-        <p>Likes {blog.likes}</p>
+        <a href={blog.url} target='_Blank'>
+          {blog.url}
+        </a>
+        <div>
+          <span>Likes {likes} </span>
+          <button onClick={handleLikeClick}>like</button>
+        </div>
         <p>{blog.author}</p>
       </div>
     </div>
