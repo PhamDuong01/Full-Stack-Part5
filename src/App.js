@@ -1,18 +1,22 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Blog from './components/Blog';
 import blogService from './services/blogs';
 import loginService from './services/login';
+import Togglable from './components/Togglable';
+import BlogForm from './components/BlogForm';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [url, setUrl] = useState('');
+  // const [title, setTitle] = useState('');
+  // const [author, setAuthor] = useState('');
+  // const [url, setUrl] = useState('');
 
   const [messageShow, setMessageShow] = useState(null);
+
+  const blogFormRef = useRef();
 
   useEffect(() => {
     const loginInfo = window.localStorage.getItem('loginInfo');
@@ -35,8 +39,8 @@ const App = () => {
         styleMessage: 'success',
         message: `Welcome ${user.name}`,
       });
-      blogService.getAll().then((blogs) => setBlogs(blogs));
-
+      const getBlog = await blogService.getAll();
+      setBlogs(getBlog);
       setTimeout(() => {
         setMessageShow(null);
       }, 5000);
@@ -55,13 +59,13 @@ const App = () => {
     setUser(null);
   };
 
-  const handleAddNewBlog = async (e) => {
-    e.preventDefault();
+  const createNewBlog = async (getBlog) => {
     const blogAdd = {
-      title: title.length < 1 ? null : title,
-      author: author,
-      url: url.length < 1 ? null : url,
+      title: getBlog.title.length < 1 ? null : getBlog.title,
+      author: getBlog.author,
+      url: getBlog.url.length < 1 ? null : getBlog.title,
     };
+
     const blog = await blogService.createNew(blogAdd, user.token);
     if (!blog.title) {
       setMessageShow({
@@ -73,6 +77,7 @@ const App = () => {
       }, 5000);
       return;
     }
+    blogFormRef.current();
 
     const getAllBlog = await blogService.getAll();
     setMessageShow({
@@ -81,9 +86,6 @@ const App = () => {
     });
 
     setBlogs(getAllBlog);
-    setTitle('');
-    setAuthor('');
-    setUrl('');
     setTimeout(() => {
       setMessageShow(null);
     }, 5000);
@@ -122,29 +124,15 @@ const App = () => {
     return (
       <div>
         <h2>blogs</h2>
-        <div>
-          <span>{user.name} is logged in</span>
+        <div style={{ paddingBottom: '10px' }}>
+          <span>{user.name} is logged in </span>
           <button onClick={handleLogout}>log out</button>
         </div>
-        <div>
-          <h1>create new</h1>
-          <form onSubmit={handleAddNewBlog}>
-            <div>
-              <span>title:</span>
-              <input type='text' onChange={(e) => setTitle(e.target.value)} value={title} />
-            </div>
-            <div>
-              <span>author:</span>
-              <input type='text' onChange={(e) => setAuthor(e.target.value)} value={author} />
-            </div>
-            <div>
-              <span>url:</span>
-              <input type='text' onChange={(e) => setUrl(e.target.value)} value={url} />
-            </div>
-            <button type='submit'>create</button>
-          </form>
-        </div>
-        <div>
+        <Togglable buttonLabel='add new Blog' ref={blogFormRef}>
+          <BlogForm creatBlog={createNewBlog} />
+        </Togglable>
+        <div style={{ paddingTop: '10px' }}>
+          <h4>Blogs list: </h4>
           {blogs.map((blog) => (
             <Blog key={blog.id} blog={blog} />
           ))}
