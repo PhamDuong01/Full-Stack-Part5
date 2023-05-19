@@ -2,7 +2,6 @@ import { useState } from 'react';
 import Togglable from './Togglable';
 
 const Blog = ({ blog }) => {
-  console.log(blog);
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -23,7 +22,7 @@ const Blog = ({ blog }) => {
       <div style={showContent}>
         <p>{blog.url}</p>
         <p>Likes {blog.likes}</p>
-        <p>{blog.user.name}</p>
+        <p>{blog.author}</p>
       </div>
     </div>
   );
