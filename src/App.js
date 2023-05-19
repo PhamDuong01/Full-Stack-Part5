@@ -98,6 +98,19 @@ const App = () => {
     const getAllBlog = await blogService.getAll();
     setBlogs(getAllBlog);
   };
+  const removeBlog = async (getBlogId) => {
+    await blogService.removeBlog(getBlogId, user.token);
+    const getAllBlog = await blogService.getAll();
+    setMessageShow({
+      styleMessage: 'success',
+      message: `Blog has been removed successfully`,
+    });
+
+    setBlogs(getAllBlog);
+    setTimeout(() => {
+      setMessageShow(null);
+    }, 5000);
+  };
 
   const loginForm = () => {
     return (
@@ -134,7 +147,13 @@ const App = () => {
           {blogs
             .sort((a, b) => b.likes - a.likes)
             .map((blog) => (
-              <Blog key={blog.id} blog={blog} updateLikesBlog={updateLikesBlog} />
+              <Blog
+                key={blog.id}
+                blog={blog}
+                updateLikesBlog={updateLikesBlog}
+                removeBlog={removeBlog}
+                owner={user.name}
+              />
             ))}
         </div>
       </div>

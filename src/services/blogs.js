@@ -22,17 +22,21 @@ const createNew = async (blogData, token = 'no token') => {
 };
 
 const updateBlog = async (blogData, token = 'no token') => {
-  const blog = {
-    ...blogData,
-    user: blogData.user.id,
-  };
   try {
-    const response = await axios.put(baseUrl + `/${blogData.id}`, blog, config(token));
+    const response = await axios.put(baseUrl + `/${blogData.id}`, blogData, config(token));
     return response.data;
   } catch (err) {
     return err.response.data;
   }
 };
 
+const removeBlog = async (blogDataId, token = 'no token') => {
+  try {
+    const response = await axios.delete(baseUrl + `/${blogDataId}`, config(token));
+    return response.data;
+  } catch (err) {
+    return err.response.data;
+  }
+};
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { getAll, createNew, updateBlog };
+export default { getAll, createNew, updateBlog, removeBlog };
