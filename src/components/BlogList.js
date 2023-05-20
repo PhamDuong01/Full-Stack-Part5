@@ -12,12 +12,6 @@ const BlogList = ({
   updateLikesBlog,
   removeBlog,
 }) => {
-  //   console.log(name);
-  //   console.log(blogs);
-  //   console.log(blogFormRef);
-  //   console.log(createNewBlog);
-  //   console.log(updateLikesBlog);
-  //   console.log(removeBlog);
   return (
     <div>
       <h2>blogs</h2>
@@ -42,7 +36,6 @@ const BlogList = ({
               owner={name}
             />
           ))}
-        {/* <Blog updateLikesBlog={updateLikesBlog} removeBlog={removeBlog} /> */}
       </div>
     </div>
   );

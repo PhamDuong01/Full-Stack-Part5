@@ -12,7 +12,7 @@ const Blog = ({ blog, updateLikesBlog, removeBlog, owner }) => {
   const [isShowContent, setIsShowContent] = useState(false);
   const showContent = { display: isShowContent ? '' : 'none' };
   const [likes, setLikes] = useState(blog.likes);
-
+  const name = blog.user ? blog.user.name : '';
   const handleLikeClick = () => {
     setLikes(likes + 1);
 
@@ -24,16 +24,17 @@ const Blog = ({ blog, updateLikesBlog, removeBlog, owner }) => {
   };
 
   const handleRemoveClick = () => {
-    if (window.confirm(`Remove ${blog.title} by ${blog.author}`)) removeBlog(blog.id);
+    window.confirm(`Remove ${blog.title} by ${blog.author}`) && removeBlog(blog.id);
     return;
   };
+
   return (
     <div style={blogStyle}>
-      {`${blog.title} - ${blog.author} `}
+      <span className='blog-title'>{`${blog.title} - ${blog.author} `}</span>
       <button onClick={() => setIsShowContent(!isShowContent)}>
         {isShowContent ? 'hide' : 'view'}
       </button>
-      <div style={showContent}>
+      <div className='blog-detail' style={showContent}>
         <a href={blog.url} target='_Blank' rel='noreferrer'>
           {blog.url}
         </a>
@@ -41,14 +42,14 @@ const Blog = ({ blog, updateLikesBlog, removeBlog, owner }) => {
           <span>Likes {likes} </span>
           <button onClick={handleLikeClick}>like</button>
         </div>
-        <p>{blog.user.name}</p>
-        {owner === blog.user.name && <button onClick={handleRemoveClick}>remove</button>}
+        <p>{name}</p>
+        {owner === name && <button onClick={handleRemoveClick}>remove</button>}
       </div>
     </div>
   );
 };
 
-Blog.prototype = {
+Blog.propTypes = {
   blog: PropTypes.object.isRequired,
   updateLikesBlog: PropTypes.func.isRequired,
   removeBlog: PropTypes.func.isRequired,
