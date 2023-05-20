@@ -19,7 +19,7 @@ const Blog = ({ blog, updateLikesBlog, removeBlog, owner }) => {
     updateLikesBlog({
       ...blog,
       likes: likes + 1,
-      user: blog.user.id,
+      user: blog.user ? blog.user.id : '',
     });
   };
 
@@ -40,7 +40,9 @@ const Blog = ({ blog, updateLikesBlog, removeBlog, owner }) => {
         </a>
         <div>
           <span>Likes {likes} </span>
-          <button onClick={handleLikeClick}>like</button>
+          <button className='btn-like' onClick={handleLikeClick}>
+            like
+          </button>
         </div>
         <p>{name}</p>
         {owner === name && <button onClick={handleRemoveClick}>remove</button>}
