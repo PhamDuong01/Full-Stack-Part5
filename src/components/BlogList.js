@@ -20,7 +20,7 @@ const BlogList = ({
         <button onClick={handleLogout}>log out</button>
       </div>
       <Togglable buttonLabel='create new Blog' ref={blogFormRef}>
-        <BlogForm creatBlog={createNewBlog} />
+        <BlogForm createBlog={createNewBlog} />
       </Togglable>
       <div style={{ paddingTop: '10px' }}>
         <h4>Blogs list: </h4>

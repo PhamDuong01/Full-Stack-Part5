@@ -1,13 +1,14 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 
-const BlogForm = ({ creatBlog }) => {
+const BlogForm = ({ createBlog }) => {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
 
   const handleAddNewBlog = (e) => {
     e.preventDefault();
-    creatBlog({ title, author, url });
+    createBlog({ title, author, url });
     setTitle('');
     setAuthor('');
     setUrl('');
@@ -15,23 +16,34 @@ const BlogForm = ({ creatBlog }) => {
   return (
     <div style={{ marginBottom: '10px' }}>
       <h2>create new blog</h2>
-      <form onSubmit={handleAddNewBlog}>
+      <form onSubmit={handleAddNewBlog} data-testid='blog-form'>
         <div>
-          <span>title:</span>
-          <input type='text' onChange={(e) => setTitle(e.target.value)} value={title} />
+          <label htmlFor='title'>title:</label>
+          <input id='title' type='text' onChange={(e) => setTitle(e.target.value)} value={title} />
         </div>
         <div>
-          <span>author:</span>
-          <input type='text' onChange={(e) => setAuthor(e.target.value)} value={author} />
+          <label htmlFor='author'>author:</label>
+          <input
+            id='author'
+            type='text'
+            onChange={(e) => setAuthor(e.target.value)}
+            value={author}
+          />
         </div>
         <div>
-          <span>url:</span>
-          <input type='text' onChange={(e) => setUrl(e.target.value)} value={url} />
+          <label htmlFor='url'>url:</label>
+          <input id='url' type='text' onChange={(e) => setUrl(e.target.value)} value={url} />
         </div>
-        <button type='submit'>create</button>
+        <button className='btn-submit' type='submit'>
+          create
+        </button>
       </form>
     </div>
   );
+};
+
+BlogForm.propTypes = {
+  createBlog: PropTypes.func.isRequired,
 };
 
 export default BlogForm;
