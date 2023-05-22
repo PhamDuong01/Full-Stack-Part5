@@ -29,7 +29,7 @@ const Blog = ({ blog, updateLikesBlog, removeBlog, owner }) => {
   };
 
   return (
-    <div style={blogStyle}>
+    <div className='blog-item' style={blogStyle}>
       <span className='blog-title'>{`${blog.title} - ${blog.author} `}</span>
       <button className='show-detail' onClick={() => setIsShowContent(!isShowContent)}>
         {isShowContent ? 'hide' : 'view'}
@@ -39,7 +39,9 @@ const Blog = ({ blog, updateLikesBlog, removeBlog, owner }) => {
           {blog.url}
         </a>
         <div>
-          <span>Likes {likes} </span>
+          <span>
+            Likes <span id='likeNumber'>{likes}</span>{' '}
+          </span>
           <button className='btn-like' onClick={handleLikeClick}>
             like
           </button>

@@ -29,7 +29,7 @@ const LoginForm = ({
             id='password'
           />
         </div>
-        <button type='submit' className='btnSubmit'>
+        <button type='submit' id='btnSubmit'>
           login
         </button>
       </form>
