@@ -16,8 +16,10 @@ const BlogList = ({
     <div>
       <h2>blogs</h2>
       <div style={{ paddingBottom: '10px' }}>
-        <span>{name} is logged in </span>
-        <button onClick={handleLogout}>log out</button>
+        <span className='loginName'>{name} is logged in </span>
+        <button onClick={handleLogout} className='btnLogout'>
+          log out
+        </button>
       </div>
       <Togglable buttonLabel='create new Blog' ref={blogFormRef}>
         <BlogForm createBlog={createNewBlog} />
