@@ -39,7 +39,6 @@ describe('Blog app', function () {
     it('succeeds with correct credentials', function () {
       cy.login('user1', 'password');
       cy.get('.noti').contains('user1');
-      cy.get('.btn-Logout').click();
     });
 
     it('fails with wrong credentials', function () {
@@ -88,6 +87,26 @@ describe('Blog app', function () {
           cy.get('.btn-Remove').click();
         });
       cy.contains('removed successfully');
+    });
+    it('only the creator can see the delete button of a blog', function () {
+      const blog = {
+        title: 'only the creator can see the delete button of a blog',
+        author: 'Author',
+        url: 'blog url',
+      };
+
+      cy.createBlog(blog.title, blog.author, blog.url);
+      cy.get('.blog-item');
+      cy.get('.btn-Logout').click();
+
+      cy.login('user2', 'password');
+      cy.get('.show-detail').click();
+      cy.get('.blog-item').find('.btn-Remove').should('not.exist');
+      cy.get('.btn-Logout').click();
+
+      cy.login('user1', 'password');
+      cy.get('.show-detail').click();
+      cy.get('.blog-item').find('.btn-Remove').should('exist');
     });
   });
 });
