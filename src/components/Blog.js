@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-const Blog = ({ blog, updateLikesBlog, removeBlog, owner }) => {
+const Blog = ({ blog, updateLikesBlog, removeBlog, curUser }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -12,7 +12,7 @@ const Blog = ({ blog, updateLikesBlog, removeBlog, owner }) => {
   const [isShowContent, setIsShowContent] = useState(false);
   const showContent = { display: isShowContent ? '' : 'none' };
   const [likes, setLikes] = useState(blog.likes);
-  const name = blog.user ? blog.user.name : '';
+  const owner = blog.user ? blog.user.name : '';
   const handleLikeClick = () => {
     setLikes(likes + 1);
 
@@ -40,14 +40,18 @@ const Blog = ({ blog, updateLikesBlog, removeBlog, owner }) => {
         </a>
         <div>
           <span>
-            Likes <span id='likeNumber'>{likes}</span>{' '}
+            Likes <span className='like-Number'>{likes}</span>{' '}
           </span>
-          <button className='btn-like' onClick={handleLikeClick}>
+          <button className='btn-Like' onClick={handleLikeClick}>
             like
           </button>
         </div>
-        <p>{name}</p>
-        {owner === name && <button onClick={handleRemoveClick}>remove</button>}
+        <p className='blog-Owner'>{owner}</p>
+        {curUser === owner && (
+          <button className='btn-Remove' onClick={handleRemoveClick}>
+            remove
+          </button>
+        )}
       </div>
     </div>
   );
@@ -57,7 +61,7 @@ Blog.propTypes = {
   blog: PropTypes.object.isRequired,
   updateLikesBlog: PropTypes.func.isRequired,
   removeBlog: PropTypes.func.isRequired,
-  owner: PropTypes.string.isRequired,
+  curUser: PropTypes.string.isRequired,
 };
 
 export default Blog;

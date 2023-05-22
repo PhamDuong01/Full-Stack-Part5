@@ -17,7 +17,7 @@ const BlogList = ({
       <h2>blogs</h2>
       <div style={{ paddingBottom: '10px' }}>
         <span className='loginName'>{name} is logged in </span>
-        <button onClick={handleLogout} className='btnLogout'>
+        <button onClick={handleLogout} className='btn-Logout'>
           log out
         </button>
       </div>
@@ -35,7 +35,7 @@ const BlogList = ({
               blog={blog}
               updateLikesBlog={updateLikesBlog}
               removeBlog={removeBlog}
-              owner={name}
+              curUser={name}
             />
           ))}
       </div>
