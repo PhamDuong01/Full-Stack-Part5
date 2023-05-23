@@ -10,6 +10,9 @@ Cypress.Commands.add('createBlog', (title, author, url) => {
   cy.get('#url').type(url);
   cy.get('form').submit();
 });
+Cypress.Commands.add('likeClick', (blogName, numLikeClick) => {
+  cy.get('.blog-item').find('.blog-title').contains(blogName).find();
+});
 
 describe('Blog app', function () {
   it('Login form is shown', function () {
@@ -107,6 +110,25 @@ describe('Blog app', function () {
       cy.login('user1', 'password');
       cy.get('.show-detail').click();
       cy.get('.blog-item').find('.btn-Remove').should('exist');
+      cy.get('.blog-item').find('.btn-Remove').click();
+      cy.get('.btn-Logout').click();
+    });
+    it('the blogs are ordered according to likes with the blog with the most likes being first', function () {
+      cy.createBlog('The title with 0 like', 'author 1', 'url 1');
+      cy.createBlog('The title with the most likes', 'author 2', 'url 2');
+      cy.createBlog('The title with the second most likes', 'author 3', 'url 3');
+      cy.get('.blog-item').eq(1).find('.show-detail').click();
+      cy.get('.blog-item').eq(2).find('.show-detail').click();
+      const btnLike1 = cy.get('.blog-item').eq(1).find('.btn-Like');
+      const btnLike2 = cy.get('.blog-item').eq(2).find('.btn-Like');
+      btnLike1.click();
+      btnLike1.click();
+      btnLike1.click();
+      btnLike2.click();
+      btnLike2.click();
+      cy.wait(1000);
+      cy.get('.blog-item').eq(0).should('contain', 'The title with the most likes');
+      cy.get('.blog-item').eq(1).should('contain', 'The title with the second most likes');
     });
   });
 });
